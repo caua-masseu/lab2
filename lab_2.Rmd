@@ -61,7 +61,25 @@ table(predict(arv_decisao, mnist, type = "class"),mnist$y) #linhas são prediç�
 #Previu bastante 8 quando era 7
 ```
 
-```{r 5}
+```{r 4}
+Mode <- function(x) which.max(table(x))
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+random_forest <- function(ntrees,depth_tree,n_samples){
+  controle <- rpart.control(maxdepth = depth_tree,minbucket = n_samples)
+  predicoes <- data.frame(rep(NA,24781))
+  for (i in c(1:ntrees)){
+    index_var <- sample(c(2:785), size = 28,replace = F)
+    index_treino <- sample(c(1:24781), size = 24781,replace = T)
+    data_treino <- mnist[index_treino,c(1,index_var)]
+    
+    tree <- rpart(y ~ .,data = data_treino, control = controle)
+    predicoes <- cbind(predicoes,predict(tree, mnist,type = "class"))
+    
+  }
+  return(apply(predicoes,FUN = Mode,MARGIN = 1))
+}
+
 
 ```
 
