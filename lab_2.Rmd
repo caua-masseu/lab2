@@ -13,8 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Instruções
 
 ```{r 1-Leitura de dados}
-mnist <- read.csv('/Downloads/MNIST0178.csv')
-MNIST0178_teste <- read.csv('/Downloads/MNIST0178-teste.csv')
+mnist <-  read.csv('https://drive.google.com/uc?export=download&id=1cSS5BeD6NFVlzcoALicJRSt-xo-VusDj')
+MNIST0178_teste <- read.csv("https://drive.google.com/uc?export=download&id=1BMq6RoV07BuNptozj86H3afLR-D2nsE3")
 ```
 
 ```{r 2 Visualização de Dígitos}
