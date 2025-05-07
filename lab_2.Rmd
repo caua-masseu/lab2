@@ -1,0 +1,67 @@
+---
+title: "Laboratório 1 - Validação Cruzada e Seleção de Variáveis"
+author: "ME905"
+output: 
+  pdf_document:
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instruções
+
+```{r 1-Leitura de dados}
+mnist <- read.csv('/Downloads/MNIST0178.csv')
+MNIST0178_teste <- read.csv('/Downloads/MNIST0178-teste.csv')
+```
+
+```{r 2 Visualização de Dígitos}
+
+converte_df <- function(vetor_covariaveis){
+vetor_covariaveis <- as.vector(unlist(vetor_covariaveis))
+if(length(vetor_covariaveis) != 784){
+stop("Passe um vetor com 784 valores!")
+}
+pos_x <- rep(1:28, each = 28)
+pos_y <- rep(1:28, times = 28)
+data.frame(pos_x, pos_y, valor = vetor_covariaveis)
+}
+
+visnum <- function(df){
+df %>% ggplot(aes(x = pos_y, y = pos_x, fill = valor)) +
+geom_tile() +
+scale_fill_gradient(low = "white", high = "black") +
+theme_void() +
+scale_y_reverse()
+}
+
+visnum(converte_df(mnist[1,2:785])) #é um 0
+visnum(converte_df(mnist[3,2:785])) # é um 1
+visnum(converte_df(mnist[6,2:785])) # é um 7
+visnum(converte_df(mnist[7,2:785])) # é um 8
+```
+
+2a) Leia o código das funções acima e visualize as observações de número 1, 3, 6 e 7.
+Que dígitos você enxerga nas imagens?
+
+2b)Antes de ajustar qualquer modelo, quais são suas expectativas quanto à tarefa de classificação?
+Entre os dígitos 0, 1, 7 e 8, quais você acredita que serão mais fáceis ou difíceis de distinguir? Justifique.
+
+```{r 3 Árvore de Classificação com rpart}
+mnist$y <- as.factor(mnist$y)
+
+arv_decisao <- rpart(y ~. ,data = mnist)
+
+table(predict(arv_decisao, mnist, type = "class"),mnist$y) #linhas são predições
+
+#Previu bastante o 8 quando era 1
+#Previu bastante 7 quando era 8
+#Previu bastante 8 quando era 7
+```
+
+```{r 5}
+
+```
+
